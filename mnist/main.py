@@ -16,8 +16,8 @@ class Net(nn.Module):
         super(Net, self).__init__()
         self.conv1 = nn.Conv2d(1, 32, 3, 1)
         self.conv2 = nn.Conv2d(32, 64, 3, 1)
-        self.dropout1 = nn.Dropout2d(0.25)
-        self.dropout2 = nn.Dropout2d(0.5)
+        # self.dropout1 = nn.Dropout2d(0.25)
+        # self.dropout2 = nn.Dropout2d(0.5)
         self.fc1 = nn.Linear(9216, 128)
         self.fc2 = nn.Linear(128, 10)
 
@@ -27,11 +27,11 @@ class Net(nn.Module):
         x = self.conv2(x)
         x = F.relu(x)
         x = F.max_pool2d(x, 2)
-        x = self.dropout1(x)
+        # x = self.dropout1(x)
         x = torch.flatten(x, 1)
         x = self.fc1(x)
         x = F.relu(x)
-        x = self.dropout2(x)
+        # x = self.dropout2(x)
         x = self.fc2(x)
         output = F.log_softmax(x, dim=1)
         return output
@@ -133,28 +133,28 @@ def main():
         train_losses.append(train_loss)
         test_losses.append(test_loss)
         scheduler.step()
-        with open("Return.txt", 'a') as f:
-            f.write("---------------------------------------------------------------------- \n")
-            f.write(f"Batch size : {args.batch_size} | Epoch :  {args.epochs} | Learning rate : {args.lr} | Log Interval : {args.log_interval}")
-            f.write(('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.2f}%)\n'.format(
-            test_loss, correct, len_dataset,
-            100. * correct / len_dataset)))
+        # with open("Return.txt", 'a') as f:
+        #     f.write("---------------------------------------------------------------------- \n")
+        #     f.write(f"Batch size : {args.batch_size} | Epoch :  {args.epochs} | Learning rate : {args.lr} | Log Interval : {args.log_interval}")
+        #     f.write(('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.2f}%)\n'.format(
+        #     test_loss, correct, len_dataset,
+        #     100. * correct / len_dataset)))
 
     if args.save_model:
         torch.save(model.state_dict(), "mnist_cnn.pt")
     
-    with open('train_losses.csv', 'w', newline='') as csvfile:
+    with open('train_losses_no_dropout.csv', 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
         writer.writerow(['epoch', 'train_loss'])
         for epoch, loss in enumerate(train_losses, 1):
             writer.writerow([epoch, loss])
 
-    with open('test_losses.csv', 'w', newline='') as csvfile:
+    with open('test_losses_no_dropout.csv', 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
         writer.writerow(['epoch', 'test_loss'])
         for epoch, loss in enumerate(test_losses, 1):
             writer.writerow([epoch, loss])
 
 if __name__ == "__main__":
-    sys.argv = ['main.py', '--batch-size', '64', '--test-batch-size', '1000', '--epochs', '14', '--lr', '1', '--gamma', '0.7', '--no-cuda', '--seed', '1', '--log-interval', '50', '--save-model']
+    sys.argv = ['main.py', '--batch-size', '64', '--test-batch-size', '1000', '--epochs', '14', '--lr', '1', '--gamma', '0.7', '--no-cuda', '--seed', '1', '--log-interval', '10', '--save-model']
     cProfile.run('main()', sort='time')
