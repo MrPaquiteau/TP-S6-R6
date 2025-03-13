@@ -47,18 +47,14 @@
 
 \maketitle
 
-\begin{abstract}
-Ce rapport résume les travaux réalisés dans le cadre du TP de Perception Acoustique. Nous explorons les concepts fondamentaux de l'analyse et de la reconnaissance de signaux audio, en utilisant le jeu de données AudioMNIST. Le TP aborde la visualisation et le prétraitement des signaux audio, l'analyse des spectrogrammes et la construction d'un modèle de reconnaissance de chiffres prononcés. Enfin, nous proposons une approche multimodale combinant reconnaissance visuelle (MNIST) et auditive (AudioMNIST).
-\end{abstract}
-
 \tableofcontents
 
 \section{Introduction}
 \label{sec:introduction}
 
-Ce TP porte sur la perception acoustique et la reconnaissance multimodale. L'objectif principal est d'explorer les techniques de traitement du signal audio capable de reconnaître des chiffres prononcés oralement. Le jeu de données AudioMNIST est utilisé comme base expérimentale, contenant des enregistrements de chiffres de 0 à 9 prononcés par différents locuteurs.
+Cette partie traite de la perception acoustique et de la reconnaissance multimodale. Nous explorons les concepts fondamentaux de l'analyse et de la reconnaissance de signaux audio, en utilisant le jeu de données AudioMNIST, qui contient des enregistrements de chiffres de 0 à 9 prononcés par différents locuteurs. Nous abordons la visualisation et le prétraitement des signaux audio, l'analyse des spectrogrammes et la construction d'un modèle de reconnaissance des chiffres prononcés. Enfin, nous proposons une approche multimodale combinant reconnaissance visuelle (MNIST) et auditive (AudioMNIST).
 
-Le rapport est structuré comme suit:
+Cette partie est structuré comme suit:
 \begin{itemize}
     \item Configuration de l'environnement et préparation des données
     \item Visualisation et analyse des signaux audio
@@ -76,7 +72,7 @@ Pour ce TP, un environnement conda a été créé avec les packages nécessaires
     \item Packages spécifiques selon le système d'exploitation (pySoundFile pour Windows, sox pour les autres)
 \end{itemize}
 
-Les fichiers de configuration de l'environnement ont été exportés pour faciliter la reproductibilité. 
+Les fichiers de configuration de l'environnement ont été exportés pour faciliter la reproductibilité (requirements.txt et requirements.yml). 
 
 \section{Exploration du jeu de données AudioMNIST}
 \label{sec:exploration}
@@ -97,7 +93,7 @@ Le nom de chaque fichier audio suit le format: \texttt{[chiffre]\_[locuteur]\_[r
 \label{sec:visualisation}
 
 Plusieurs méthodes de visualisation ont été explorées pour analyser les signaux audio.
-Elles permettent mieux comprendre les caractéristiques des signaux audio:
+Elles permettent de mieux comprendre les caractéristiques des signaux audio:
 \begin{itemize}
     \item Représentation temporelle de la forme d'onde
     \item Spectrogramme Mel avec échelle en décibels
@@ -108,7 +104,7 @@ Elles permettent mieux comprendre les caractéristiques des signaux audio:
     \centering
     \includegraphics[width=0.9\textwidth]{WaveSpectro_1.png}
     \caption{Visualisation combinée: forme d'onde (haut) et spectrogramme Mel (bas) d'un fichier audio "8\_theo\_26.wav"}
-    \label{fig:waveform_spec}
+    \label{fig:waveform_spec_1}
 \end{figure}
 
 Pour chaque fichier analysé, les informations suivantes ont été extraites:
@@ -121,18 +117,19 @@ Pour chaque fichier analysé, les informations suivantes ont été extraites:
 
 \begin{table}[h]
     \centering
-    \renewcommand{\arraystretch}{1.2} % Espacement entre les lignes
-    \begin{tabular}{>{\ttfamily}l l} 
-        \toprule
+    \begin{tabular}{|l|c|}
+        \hline
         \textbf{Paramètre} & \textbf{Valeur} \\
-        \midrule
-        Fichier & 8\_theo\_26.wav \\
-        Sample rate & 8000 Hz \\
-        Forme de l'onde & [1, 2779] \\
+        \hline
+        Fichier & \texttt{8\_theo\_26.wav} \\
+        Taux d’échantillonnage & 8000 Hz \\
+        Forme de l’onde & [1, 2779] \\
         Forme du spectrogramme & [1, 128, 14] \\
-        Durée de l'audio & 0.35 seconds \\
-        \bottomrule
+        Durée de l’audio & 0.35 s \\
+        \hline
     \end{tabular}
+    \caption{Caractéristiques du 1er fichier audio analysé.}
+    \label{tab:audio_info}
 \end{table}
 
 \begin{figure}[H]
@@ -141,6 +138,59 @@ Pour chaque fichier analysé, les informations suivantes ont été extraites:
     \caption{Visualisation combinée: forme d'onde (haut) et spectrogramme Mel (bas) d'un fichier audio "1\_nicolas\_14.wav"}
     \label{fig:waveform_spec}
 \end{figure}
+
+La visualisation des signaux audio permet de mieux comprendre leurs caractéristiques et d’analyser leur contenu spectral. Deux méthodes sont utilisées :
+
+\begin{itemize}
+    \item \textbf{Représentation temporelle} : affichage de la forme d’onde.
+    \item \textbf{Spectrogramme Mel} : représentation spectrale avec échelle en décibels.
+\end{itemize}
+
+\subsection{Forme d’onde}
+
+La Figure~\ref{fig:waveform_spec_1} présente une visualisation combinée de la forme d’onde et du spectrogramme Mel pour le fichier audio \texttt{8\_theo\_26.wav}.
+
+\begin{itemize}
+    \item \textbf{Axe des abscisses (X)} : Indice des échantillons audio.
+    \item \textbf{Axe des ordonnées (Y)} : Amplitude du signal audio.
+    \item \textbf{Interprétation} : Cette représentation permet d'observer l'intensité du signal au fil du temps. Cependant, elle ne donne aucune information sur la répartition des fréquences contenues dans le son. Par exemple, deux sons ayant des fréquences différentes mais des amplitudes similaires peuvent avoir des formes d’onde visuellement proches.
+\end{itemize}
+
+\subsection{Spectrogramme Mel}
+\begin{itemize}
+    \item \textbf{Axe des abscisses (X)} : Temps divisé en fenêtres successives.
+    \item \textbf{Axe des ordonnées (Y)} : Bandes de fréquences sur l’échelle Mel.
+    \item \textbf{Interprétation des couleurs}
+    Les couleurs du spectrogramme indiquent l'intensité du signal dans différentes bandes de fréquences :
+    \begin{itemize}
+        \item \textbf{Zones jaunes / blanches} : Correspondent aux fréquences avec une intensité élevée. Elles indiquent les composantes dominantes du son.
+        \item \textbf{Zones violettes / noires} : Correspondent aux fréquences avec une intensité faible. Elles représentent les zones silencieuses ou les parties du spectre où l’énergie est très faible.
+    \end{itemize}
+    \item \textbf{Interprétation} : Contrairement à la forme d’onde, le spectrogramme Mel montre la distribution des fréquences au fil du temps, ce qui est essentiel pour l’analyse acoustique.
+\end{itemize}
+
+\subsection{Données techniques du fichier audio}
+Les caractéristiques du fichier analysé sont les suivantes :
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|l|c|}
+        \hline
+        \textbf{Paramètre} & \textbf{Valeur} \\
+        \hline
+        Fichier & \texttt{1\_nicolas\_14.wav} \\
+        Taux d’échantillonnage & 8000 Hz \\
+        Forme de l’onde & [1, 2800] \\
+        Forme du spectrogramme & [1, 128, 13] \\
+        Durée de l’audio & 0.32 s \\
+        \hline
+    \end{tabular}
+    \caption{Caractéristiques du 2e fichier audio analysé.}
+    \label{tab:audio_info}
+\end{table}
+
+\subsection{Conclusion}
+La combinaison de ces deux représentations permet une analyse complète du signal audio. La forme d’onde fournit des informations globales sur l’intensité du signal, tandis que le spectrogramme Mel met en évidence les variations fréquentielles au fil du temps.
 
 \begin{table}[h]
     \centering
@@ -169,11 +219,6 @@ Pour chaque fichier analysé, les informations suivantes ont été extraites:
 Le script \texttt{SplitTrainTest\_original.py} a été utilisé pour diviser le jeu de données en deux sous-ensembles : 75\% des données pour l'entraînement et 25\% pour les tests, contrairement à la répartition 80/20 vue précédemment. Cette séparation est réalisée de manière aléatoire tout en garantissant une répartition équilibrée des classes. 
 
 Pour cela, l'ensemble des données est préalablement mélangé afin d'assurer une représentation relativement équitable de chaque modalité cible dans les ensembles d'entraînement et de test.
-
-\begin{lstlisting}
-# Exécution du script de séparation
-python SplitTrainTest_original.py
-\end{lstlisting}
 
 \subsection{Analyse de la répartition des données}
 \label{subsec:analyse_repartition}
@@ -287,6 +332,11 @@ Le modèle utilisé est un réseau de neurones convolutif (CNN) avec l'architect
     \label{fig:cnn_archi}
 \end{figure}
 
+\subsection{Quel est ce modèle ?}
+\label{subsec:quel_modele}
+
+Les blocs 11 à 15 décrivent un modèle de réseau de neurones convolutif (CNN) pour la classification multimodale d'images et de spectrogrammes audio. Le modèle est entraîné à l'aide de PyTorch, avec des fonctions de perte et des optimisateurs pour ajuster les poids du réseau. Le processus d'entraînement et de test est itératif, avec des évaluations de la performance à chaque époque pour suivre la précision et la perte du modèle.
+
 \subsection{Fonction de perte et optimisation}
 \label{subsec:loss_optim}
 
@@ -325,7 +375,7 @@ Le processus comprend deux fonctions principales:
 
 L'entraînement se déroule sur 30 époques, avec un suivi de la perte et de la précision pour les ensembles d'entraînement et de test.
 
-\subsection{Analyse des performances}
+\section{Analyse des performances}
 \label{subsec:performances}
 
 Les courbes d'apprentissage montrent :
@@ -352,11 +402,6 @@ Les courbes d'apprentissage montrent :
     
     \item \textbf{Interprétation :} L'écart entre les performances d'entraînement et de test suggère un léger surapprentissage (overfitting). Cependant, étant donné que les résultats sur l'ensemble de test restent bons, cela montre que le modèle généralise correctement, bien que des ajustements pour limiter l'overfitting pourraient être nécessaires.
 \end{itemize}
-
-\subsection{Quel modèle ?}
-\label{subsec:quel_modele}
-
-Les blocs 11 à 15 décrivent un modèle de réseau de neurones convolutif (CNN) pour la classification multimodale d'images et de spectrogrammes audio. Le modèle est entraîné à l'aide de PyTorch, avec des fonctions de perte et des optimisateurs pour ajuster les poids du réseau. Le processus d'entraînement et de test est itératif, avec des évaluations de la performance à chaque époque pour suivre la précision et la perte du modèle.
 
 \section{Proposition d'un système multimodal}
 \label{sec:multimodal}
@@ -473,19 +518,6 @@ Cette fusion vise à améliorer la performance globale du système en tirant par
     \item Raffinement de la stratégie de fusion
 \end{itemize}
 
-\section{Conclusion}
-\label{sec:conclusion}
-
-Ce TP a permis d'explorer en profondeur les techniques de traitement et de reconnaissance des signaux audio, en utilisant le jeu de données AudioMNIST. Nous avons:
-\begin{itemize}
-    \item Analysé et visualisé des signaux audio et leurs représentations fréquentielles
-    \item Étudié l'architecture d'un réseau de neurones convolutif pour la reconnaissance de chiffres prononcés
-    \item Analysé le processus d'entraînement et les performances du modèle
-    \item Proposé une approche multimodale combinant reconnaissance visuelle et auditive
-\end{itemize}
-
-La proposition d'un système multimodal ouvre des perspectives intéressantes pour améliorer la robustesse et la précision de la reconnaissance des chiffres. Cette approche pourrait être étendue à d'autres applications nécessitant l'intégration de plusieurs modalités perceptives.
-
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{multimodal_system.jpg}
@@ -493,18 +525,8 @@ La proposition d'un système multimodal ouvre des perspectives intéressantes po
     \label{fig:system}
 \end{figure}
 
-\section{Références}
-\label{sec:references}
-
-\begin{thebibliography}{9}
-    \bibitem{kaggle} Jokekling, "PyTorch Study Audio", Kaggle, \url{https://www.kaggle.com/code/jokekling/pytorch-study-audio}
-    \bibitem{audiomnist} Becker, S., Ackermann, M., Lapuschkin, S., Müller, K. R., & Samek, W. (2018). "Interpreting and explaining deep neural networks for classification of audio signals." arXiv preprint arXiv:1807.03418.
-    \bibitem{mel} Stevens, S. S., Volkmann, J., & Newman, E. B. (1937). "A scale for the measurement of the psychological magnitude pitch." The Journal of the Acoustical Society of America, 8(3), 185-190.
-    \bibitem{pytorch} Paszke, A., Gross, S., Massa, F., Lerer, A., Bradbury, J., Chanan, G., ... & Chintala, S. (2019). "PyTorch: An imperative style, high-performance deep learning library." In Advances in Neural Information Processing Systems (pp. 8026-8037).
-\end{thebibliography}
-
 \appendix
-\section{Code complet}
+\section{Code utilisés}
 \label{app:code}
 
 \begin{lstlisting}
