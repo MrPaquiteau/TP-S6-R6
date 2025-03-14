@@ -231,11 +231,48 @@ L'analyse des fichiers CSV générés confirme que:
 
 \begin{table}[H]
     \centering
-    \caption{Répartition des classes dans les ensembles de test, et d'entraînement}
-    \label{tab:repartition}
-    \includegraphics[width=0.8\textwidth]{Tables_LablesProps_Test_Train.png}
+    \label{tab:data_distribution}
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \caption{Test set (750 échantillons)}
+        \begin{tabular}{|c|c|c|}
+            \hline
+            label & Count & Proportion \\
+            \hline
+            5 & 84 & 0.112 \\
+            0 & 81 & 0.108 \\
+            4 & 77 & 0.102 \\
+            8 & 76 & 0.101 \\
+            9 & 75 & 0.100 \\
+            1 & 73 & 0.097 \\
+            6 & 73 & 0.097 \\
+            2 & 72 & 0.096 \\
+            3 & 70 & 0.093 \\
+            7 & 69 & 0.092 \\
+            \hline
+        \end{tabular}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \caption{Train set (2250 échantillons)}
+        \begin{tabular}{|c|c|c|}
+            \hline
+            label & Count & Proportion \\
+            \hline
+            7 & 231 & 0.102 \\
+            3 & 230 & 0.102 \\
+            2 & 228 & 0.101 \\
+            1 & 227 & 0.100 \\
+            6 & 227 & 0.100 \\
+            9 & 225 & 0.100 \\
+            8 & 224 & 0.099 \\
+            4 & 223 & 0.099 \\
+            0 & 219 & 0.097 \\
+            5 & 216 & 0.096 \\
+            \hline
+        \end{tabular}
+    \end{minipage}
 \end{table}
-
 
 \subsection{Etude du modèle}
 \label{subsec:etude_model}
