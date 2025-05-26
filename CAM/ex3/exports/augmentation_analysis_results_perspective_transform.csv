@@ -1,0 +1,11 @@
+Augmentation Index,Transformation,Model,CAM Method,Target Class,Score,Predicted Class,Augmented Image Path
+1,Perspective Transform,RegNet_Y_400MF,GradCAM++,852,0.9982,852,CAM/ex3/exports\perspective_transform_1.png
+2,Perspective Transform,RegNet_Y_400MF,GradCAM++,852,0.9991,852,CAM/ex3/exports\perspective_transform_2.png
+3,Perspective Transform,RegNet_Y_400MF,GradCAM++,852,0.9994,852,CAM/ex3/exports\perspective_transform_3.png
+4,Perspective Transform,RegNet_Y_400MF,GradCAM++,852,0.9885,852,CAM/ex3/exports\perspective_transform_4.png
+5,Perspective Transform,RegNet_Y_400MF,GradCAM++,852,0.9992,852,CAM/ex3/exports\perspective_transform_5.png
+6,Perspective Transform,RegNet_Y_400MF,GradCAM++,852,0.9995,852,CAM/ex3/exports\perspective_transform_6.png
+7,Perspective Transform,RegNet_Y_400MF,GradCAM++,852,0.9993,852,CAM/ex3/exports\perspective_transform_7.png
+8,Perspective Transform,RegNet_Y_400MF,GradCAM++,852,0.9992,852,CAM/ex3/exports\perspective_transform_8.png
+9,Perspective Transform,RegNet_Y_400MF,GradCAM++,852,0.9994,852,CAM/ex3/exports\perspective_transform_9.png
+10,Perspective Transform,RegNet_Y_400MF,GradCAM++,852,0.9995,852,CAM/ex3/exports\perspective_transform_10.png
