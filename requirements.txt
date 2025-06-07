@@ -7,3 +7,6 @@ pillow>=9.0.0
 opencv-python>=4.5.0
 imgaug>=0.4.0
 git+https://github.com/frgfm/torch-cam.git@main#egg=torchcam
+pySoundFile; sys_platform == "win32"
+sox; sys_platform != "win32"
+librosa
